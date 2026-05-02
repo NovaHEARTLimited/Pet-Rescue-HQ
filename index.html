@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pet Rescue HQ™ — Homework Hero System</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rescue-green: #2D9B5A;
+    --green-light: #E8F8EF;
+    --green-mid: #A8E6C1;
+    --rescue-teal: #0E9B8A;
+    --teal-light: #CCFAF4;
+    --rescue-amber: #F5A623;
+    --amber-light: #FFF4E0;
+    --amber-mid: #FFD98A;
+    --rescue-red: #E8524A;
+    --red-light: #FDECEA;
+    --rescue-blue: #3B82C4;
+    --blue-light: #EBF4FF;
+    --rescue-purple: #8B5CF6;
+    --purple-light: #F3EEFF;
+    --rescue-pink: #EC4899;
+    --pink-light: #FDF2F8;
+    --cream: #FFFDF5;
+    --warm-white: #FFFFFF;
+    --dark: #1A2E1A;
+    --mid: #4A6741;
+    --soft: #8FAF89;
+    --paw-brown: #8B5E3C;
+    --paw-light: #F5EDE4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #F0FAF4;
+    color: var(--dark);
+  }
+
+  /* NAV */
+  .nav {
+    background: var(--rescue-green);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 3px 16px rgba(45,155,90,0.4);
+  }
+  .nav-logo { font-size: 24px; }
+  .nav-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    color: white;
+    letter-spacing: 0.5px;
+    margin-right: 8px;
+  }
+  .nav-btn {
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.25); }
+  .nav-btn.active { background: var(--rescue-amber); color: var(--dark); border-color: var(--rescue-amber); }
+  .print-btn {
+    margin-left: auto;
+    background: white;
+    border: none;
+    color: var(--rescue-green);
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  /* PAGE */
+  .page-wrap { display: none; max-width: 920px; margin: 0 auto; padding: 28px 20px 60px; }
+  .page-wrap.active { display: block; }
+
+  /* SHEET */
+  .sheet {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    margin-bottom: 28px;
+  }
+
+  /* HEADER */
+  .sheet-header {
+    padding: 24px 32px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-tag {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+  .header-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 32px;
+    line-height: 1.1;
+  }
+  .header-sub {
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 4px;
+    opacity: 0.75;
+  }
+  .header-icon {
+    position: absolute;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 70px;
+    opacity: 0.9;
+  }
+
+  .sheet-body { padding: 26px 32px; }
+
+  /* PAW PRINT DECO */
+  .paw-deco {
+    position: absolute;
+    opacity: 0.06;
+    font-size: 48px;
+    pointer-events: none;
+  }
+
+  /* =================== */
+  /* SHARED COMPONENTS   */
+  /* =================== */
+  .cut-hint {
+    text-align: center;
+    font-size: 11px;
+    color: var(--soft);
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+  .cut-line { flex: 1; border-top: 2px dashed #C8E6D0; }
+
+  .field-label {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .field-line {
+    border-bottom: 2.5px solid currentColor;
+    height: 28px;
+    opacity: 0.4;
+  }
+
+  /* ANIMAL RECOVERY STAGES */
+  .recovery-stages {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stage {
+    width: 90px;
+    text-align: center;
+    position: relative;
+  }
+  .stage-animal {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 8px;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .stage-animal.locked {
+    filter: grayscale(1);
+    opacity: 0.3;
+  }
+  .stage-animal.unlocked {
+    box-shadow: 0 0 0 4px currentColor;
+    opacity: 1;
+  }
+  .stage-num {
+    font-family: 'Fredoka One', cursive;
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .stage-label {
+    font-size: 10px;
+    font-weight: 700;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  /* TASK CARDS */
+  .task-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 2.5px solid;
+    margin-bottom: 10px;
+  }
+  .task-check {
+    width: 28px; height: 28px;
+    border: 3px solid currentColor;
+    border-radius: 8px;
+    flex-shrink: 0;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .task-check.done { background: currentColor; }
+  .task-icon { font-size: 28px; }
+  .task-text { flex: 1; }
+  .task-name { font-family: 'Fredoka One', cursive; font-size: 17px; }
+  .task-sub { font-size: 11px; font-weight: 600; opacity: 0.65; margin-top: 1px; }
+  .task-tokens { display: flex; gap: 4px; }
+  .token { font-size: 16px; opacity: 0.3; }
+  .token.earned { opacity: 1; }
+
+  /* MEDICINE TOKENS */
+  .token-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+  }
+  .token-card {
+    border: 2.5px dashed #C8E6D0;
+    border-radius: 14px;
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #F8FFF9;
+  }
+  .token-card:hover { border-color: var(--rescue-green); background: var(--green-light); }
+  .token-card.earned { background: var(--amber-light); border-color: var(--rescue-amber); border-style: solid; }
+  .token-card .t-icon { font-size: 26px; }
+  .token-card .t-label { font-size: 8px; font-weight: 800; color: var(--soft); letter-spacing: 0.5px; text-align: center; line-height: 1.3; }
+
+  /* SUBJECT CARDS */
+  .subject-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .subject-card {
+    border-radius: 18px;
+    padding: 20px 18px;
+    border: 3px solid;
+  }
+  .subject-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .subject-icon { font-size: 32px; }
+  .subject-title { font-family: 'Fredoka One', cursive; font-size: 20px; }
+  .subject-task-rows { display: flex; flex-direction: column; gap: 8px; }
+  .subject-task-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.6);
+    border: 1.5px solid rgba(255,255,255,0.8);
+  }
+  .subject-check {
+    width: 20px; height: 20px;
+    border: 2.5px solid currentColor;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+  .subject-line { flex: 1; border-bottom: 1.5px dashed rgba(0,0,0,0.15); height: 18px; }
+  .subject-token { font-size: 14px; opacity: 0.5; }
+
+  /* PATIENT CHART */
+  .patient-chart {
+    border: 3px solid var(--rescue-green);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .chart-header {
+    background: var(--rescue-green);
+    color: white;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .chart-title { font-family: 'Fredoka One', cursive; font-size: 20px; }
+  .chart-body { padding: 20px; }
+  .chart-row {
+    display: grid;
+    grid-template-columns: 130px 1fr 100px;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px dashed #C8E6D0;
+  }
+  .chart-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .chart-field-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: var(--soft); margin-bottom: 3px; }
+  .chart-field-value { border-bottom: 2px solid #C8E6D0; height: 26px; }
+  .chart-vitals {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .vital-box {
+    border: 2px solid #C8E6D0;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    background: var(--green-light);
+  }
+  .vital-icon { font-size: 24px; margin-bottom: 4px; }
+  .vital-label { font-size: 9px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--soft); margin-bottom: 4px; }
+  .vital-value { border-bottom: 1.5px solid #C8E6D0; height: 22px; }
+
+  /* BRAIN BREAK SPINNER */
+  .spinner-container {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .spinner-wheel {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    border: 4px solid var(--rescue-green);
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .spinner-segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    transform-origin: 100% 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 16px;
+    padding-top: 16px;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+  .spinner-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid var(--rescue-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    z-index: 10;
+    cursor: pointer;
+  }
+  .spinner-arrow {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    z-index: 11;
+  }
+  .break-cards {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    min-width: 200px;
+  }
+  .break-card {
+    border-radius: 14px;
+    padding: 14px 12px;
+    border: 2.5px solid;
+    text-align: center;
+  }
+  .break-card-icon { font-size: 28px; margin-bottom: 6px; display: block; }
+  .break-card-title { font-family: 'Fredoka One', cursive; font-size: 14px; margin-bottom: 4px; }
+  .break-card-desc { font-size: 10px; font-weight: 700; opacity: 0.7; }
+
+  /* SCRIPT SWAPS */
+  .script-row {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .script-box {
+    border-radius: 12px;
+    padding: 14px 16px;
+    border: 2px solid;
+  }
+  .script-tag { font-size: 9px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+  .script-text { font-size: 13px; font-weight: 700; line-height: 1.4; font-style: italic; }
+  .script-arrow-box { text-align: center; font-size: 22px; }
+
+  /* WEEKLY LOG */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .day-col { border: 2.5px solid var(--rescue-green); border-radius: 16px; overflow: hidden; }
+  .day-head { background: var(--rescue-green); color: white; text-align: center; padding: 10px 4px; font-family: 'Fredoka One', cursive; font-size: 16px; }
+  .day-body { padding: 10px 8px; }
+  .day-slot { border-bottom: 1px dashed #C8E6D0; height: 28px; display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .day-check-sm { width: 14px; height: 14px; border: 2px solid #C8E6D0; border-radius: 4px; flex-shrink: 0; }
+  .day-subject { font-size: 9px; color: var(--soft); font-weight: 700; }
+  .day-tokens { padding: 8px; text-align: center; border-top: 2px solid #C8E6D0; font-size: 16px; }
+
+  /* RECOVERY CERT */
+  .cert {
+    border: 5px double var(--rescue-green);
+    border-radius: 20px;
+    padding: 36px 44px;
+    text-align: center;
+    background: linear-gradient(135deg, #F8FFF9 0%, white 50%, #F8FFF9 100%);
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .cert-corner { position: absolute; font-size: 28px; opacity: 0.3; }
+  .cert-badge { font-size: 56px; margin-bottom: 10px; }
+  .cert-org { font-size: 10px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; color: var(--rescue-green); margin-bottom: 6px; }
+  .cert-title { font-family: 'Fredoka One', cursive; font-size: 34px; color: var(--dark); margin-bottom: 8px; }
+  .cert-awarded { font-size: 14px; color: var(--soft); margin-bottom: 16px; }
+  .cert-name-line { border-bottom: 2px solid var(--rescue-green); width: 280px; margin: 0 auto 6px; height: 36px; }
+  .cert-name-label { font-size: 10px; font-weight: 800; color: var(--soft); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
+  .cert-reason { font-size: 15px; font-weight: 700; color: var(--mid); font-style: italic; margin-bottom: 20px; }
+  .cert-footer { display: flex; justify-content: space-around; margin-top: 24px; }
+  .cert-sig-line { border-bottom: 1.5px solid #C8E6D0; width: 120px; margin-bottom: 5px; height: 28px; }
+  .cert-sig-label { font-size: 10px; font-weight: 700; color: var(--soft); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ID BADGE */
+  .id-badge {
+    width: 260px;
+    background: linear-gradient(145deg, #1A5C35, #2D9B5A);
+    border-radius: 20px;
+    padding: 22px 18px;
+    color: white;
+    border: 3px solid var(--rescue-amber);
+    position: relative;
+    overflow: hidden;
+  }
+  .badge-paw { position: absolute; right: -10px; bottom: -10px; font-size: 80px; opacity: 0.08; }
+  .badge-top { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; border-bottom: 1px solid rgba(245,166,35,0.3); padding-bottom: 12px; }
+  .badge-logo { font-size: 26px; }
+  .badge-org { font-family: 'Fredoka One', cursive; font-size: 13px; color: var(--rescue-amber); line-height: 1.2; }
+  .badge-photo { width: 68px; height: 68px; border-radius: 50%; border: 3px dashed rgba(245,166,35,0.5); display: flex; align-items: center; justify-content: center; font-size: 10px; color: rgba(255,255,255,0.4); text-align: center; margin: 0 auto 14px; }
+  .badge-field { margin-bottom: 9px; }
+  .badge-field-label { font-size: 8px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--rescue-amber); margin-bottom: 2px; }
+  .badge-field-line { border-bottom: 1.5px solid rgba(255,255,255,0.25); height: 20px; font-size: 13px; font-weight: 700; }
+  .badge-rank { margin-top: 12px; background: rgba(245,166,35,0.15); border-radius: 8px; padding: 8px 10px; border: 1px solid rgba(245,166,35,0.3); }
+  .badge-rank-label { font-size: 8px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--rescue-amber); }
+  .badge-rank-value { font-family: 'Fredoka One', cursive; font-size: 15px; color: white; }
+
+  /* RANK system */
+  .rank-list { display: flex; flex-direction: column; gap: 0; }
+  .rank-item { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-radius: 14px; margin-bottom: 8px; border: 2.5px solid; }
+  .rank-icon { font-size: 38px; }
+  .rank-level { font-size: 9px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; opacity: 0.6; margin-bottom: 2px; }
+  .rank-name { font-family: 'Fredoka One', cursive; font-size: 22px; }
+  .rank-desc { font-size: 11px; font-weight: 600; opacity: 0.7; margin-top: 2px; }
+  .rank-connector { height: 14px; margin-left: 40px; border-left: 3px dashed #C8E6D0; }
+  .rank-tokens-needed { margin-left: auto; text-align: right; font-size: 11px; font-weight: 700; opacity: 0.7; }
+
+  /* PARENT GUIDE */
+  .guide-section { margin-bottom: 20px; }
+  .guide-title { font-family: 'Fredoka One', cursive; font-size: 18px; color: var(--rescue-green); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .guide-box { background: var(--green-light); border: 2px solid var(--green-mid); border-radius: 14px; padding: 16px 18px; }
+  .guide-text { font-size: 13px; font-weight: 600; line-height: 1.7; color: var(--mid); }
+  .guide-highlight { background: var(--amber-light); border: 2px solid var(--amber-mid); border-radius: 14px; padding: 14px 18px; margin-top: 10px; }
+  .guide-highlight-text { font-size: 13px; font-weight: 700; color: #78400A; font-style: italic; }
+
+  @media print {
+    .nav { display: none; }
+    .page-wrap { display: block !important; padding: 0; max-width: 100%; }
+    .sheet { box-shadow: none; border-radius: 0; page-break-after: always; margin-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-logo">🐾</div>
+  <div class="nav-title">Pet Rescue HQ™</div>
+  <button class="nav-btn active" onclick="showPage('dashboard')">Dashboard</button>
+  <button class="nav-btn" onclick="showPage('badge')">ID Badge</button>
+  <button class="nav-btn" onclick="showPage('patient')">Patient Chart</button>
+  <button class="nav-btn" onclick="showPage('recovery')">Recovery Tracker</button>
+  <button class="nav-btn" onclick="showPage('tokens')">Medicine Tokens</button>
+  <button class="nav-btn" onclick="showPage('subjects')">Subject Rescues</button>
+  <button class="nav-btn" onclick="showPage('breaks')">Brain Breaks</button>
+  <button class="nav-btn" onclick="showPage('ranks')">Medic Ranks</button>
+  <button class="nav-btn" onclick="showPage('scripts')">Parent Scripts</button>
+  <button class="nav-btn" onclick="showPage('weekly')">Weekly Log</button>
+  <button class="nav-btn" onclick="showPage('cert')">Certificates</button>
+  <button class="nav-btn" onclick="showPage('guide')">Parent Guide</button>
+  <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+</div>
+
+<!-- ======================== -->
+<!-- DASHBOARD                -->
+<!-- ======================== -->
+<div class="page-wrap active" id="page-dashboard">
+<div class="sheet">
+  <div class="sheet-header" style="background:linear-gradient(135deg,#1A5C35,#2D9B5A);">
+    <div class="paw-deco" style="top:10%;right:160px;">🐾</div>
+    <div class="paw-deco" style="bottom:-10%;left:40%;">🐾</div>
+    <div class="header-tag" style="color:var(--amber-mid);">🚨 Rescue Mission Active</div>
+    <div class="header-title" style="color:white;">Pet Rescue HQ™</div>
+    <div class="header-sub" style="color:rgba(255,255,255,0.7);">Homework Hero System · Today's Rescue Mission Briefing</div>
+    <div class="header-icon">🐶</div>
+  </div>
+  <div class="sheet-body">
+
+    <!-- Top info row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;margin-bottom:22px;">
+      <div>
+        <div class="field-label" style="color:var(--soft);">Field Medic Name</div>
+        <div class="field-line" style="color:var(--rescue-green);border-color:var(--rescue-green);"></div>
+      </div>
+      <div>
+        <div class="field-label" style="color:var(--soft);">Today's Date</div>
+        <div class="field-line" style="color:var(--rescue-green);border-color:var(--rescue-green);"></div>
+      </div>
+      <div>
+        <div class="field-label" style="color:var(--soft);">Current Rank</div>
+        <div class="field-line" style="color:var(--rescue-green);border-color:var(--rescue-green);"></div>
+      </div>
+      <div>
+        <div class="field-label" style="color:var(--soft);">Today's Patient</div>
+        <div class="field-line" style="color:var(--rescue-green);border-color:var(--rescue-green);"></div>
+      </div>
+    </div>
+
+    <!-- Initial endowment box -->
+    <div style="background:var(--amber-light);border:2.5px solid var(--rescue-amber);border-radius:16px;padding:14px 18px;margin-bottom:20px;display:flex;gap:14px;align-items:center;">
+      <span style="font-size:32px;">🎁</span>
+      <div>
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;color:#78400A;">Welcome Bonus — You've Already Started!</div>
+        <div style="font-size:12px;font-weight:700;color:#A0550E;margin-top:3px;">You get 2 FREE Medicine Tokens just for opening the Rescue HQ and writing your name above. Stick them on your token sheet now! 🏥</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <!-- Mission tasks -->
+      <div>
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--rescue-green);margin-bottom:12px;display:flex;align-items:center;gap:8px;">🗂️ Today's Rescue Missions</div>
+        <div id="dashTasks">
+          <div class="task-card" style="background:var(--blue-light);border-color:#93C5FD;color:#1D4ED8;">
+            <div class="task-check" style="color:#3B82F6;" onclick="toggleCheck(this)"></div>
+            <div class="task-icon">📖</div>
+            <div class="task-text"><div class="task-name">Reading Rescue</div><div class="task-sub">Read for 10 minutes</div></div>
+            <div class="task-tokens"><span class="token">💊</span><span class="token">💊</span><span class="token">💊</span></div>
+          </div>
+          <div class="task-card" style="background:#FFF4E0;border-color:#FCD34D;color:#92400E;">
+            <div class="task-check" style="color:#F59E0B;" onclick="toggleCheck(this)"></div>
+            <div class="task-icon">🔢</div>
+            <div class="task-text"><div class="task-name">Maths Mission</div><div class="task-sub">Solve 10 problems</div></div>
+            <div class="task-tokens"><span class="token">💊</span><span class="token">💊</span><span class="token">💊</span></div>
+          </div>
+          <div class="task-card" style="background:var(--purple-light);border-color:#C4B5FD;color:#5B21B6;">
+            <div class="task-check" style="color:#7C3AED;" onclick="toggleCheck(this)"></div>
+            <div class="task-icon">✏️</div>
+            <div class="task-text"><div class="task-name">Writing Ward</div><div class="task-sub">Write 3 sentences</div></div>
+            <div class="task-tokens"><span class="token">💊</span><span class="token">💊</span><span class="token">💊</span></div>
+          </div>
+          <div class="task-card" style="background:var(--pink-light);border-color:#F9A8D4;color:#9D174D;">
+            <div class="task-check" style="color:#EC4899;" onclick="toggleCheck(this)"></div>
+            <div class="task-icon">🌍</div>
+            <div class="task-text"><div class="task-name">Topic Rescue</div><div class="task-sub">Review today's topic</div></div>
+            <div class="task-tokens"><span class="token">💊</span><span class="token">💊</span><span class="token">💊</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <!-- Mini recovery preview -->
+        <div style="border:2.5px solid var(--rescue-green);border-radius:16px;padding:16px;">
+          <div style="font-family:'Fredoka One',cursive;font-size:16px;color:var(--rescue-green);margin-bottom:12px;">🐾 Patient Recovery Status</div>
+          <div style="display:flex;justify-content:space-between;gap:6px;">
+            <div style="text-align:center;">
+              <div style="font-size:32px;filter:grayscale(1);opacity:0.3;">🐶</div>
+              <div style="font-size:9px;font-weight:800;color:var(--soft);">Poorly</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:32px;filter:grayscale(1);opacity:0.3;">🐶</div>
+              <div style="font-size:9px;font-weight:800;color:var(--soft);">Resting</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:32px;filter:grayscale(1);opacity:0.3;">🐶</div>
+              <div style="font-size:9px;font-weight:800;color:var(--soft);">Better</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:32px;filter:grayscale(1);opacity:0.3;">🐶</div>
+              <div style="font-size:9px;font-weight:800;color:var(--soft);">Happy</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:32px;">🐶</div>
+              <div style="font-size:9px;font-weight:800;color:var(--rescue-green);">🎉 Rescued!</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;background:#F0FAF4;border-radius:10px;padding:10px;font-size:11px;font-weight:700;color:var(--mid);text-align:center;">
+            Circle the stage your patient is at today
+          </div>
+        </div>
+
+        <!-- Token counter -->
+        <div style="background:var(--amber-light);border:2.5px solid var(--rescue-amber);border-radius:16px;padding:16px;">
+          <div style="font-family:'Fredoka One',cursive;font-size:16px;color:#78400A;margin-bottom:10px;">💊 Medicine Tokens Earned Today</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+            <span style="font-size:24px;opacity:0.3;">💊</span>
+          </div>
+          <div style="margin-top:10px;font-size:11px;font-weight:700;color:#A0550E;">Colour or tick each 💊 as you earn it — every 3 tokens = 1 recovery stage!</div>
+        </div>
+
+        <!-- Clinic sign -->
+        <div style="background:var(--rescue-green);border-radius:16px;padding:16px;text-align:center;color:white;">
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;">🏥 Rescue Clinic Status</div>
+          <div style="display:flex;gap:10px;justify-content:center;">
+            <div style="background:rgba(255,255,255,0.2);border:2px solid white;border-radius:10px;padding:8px 16px;font-weight:800;font-size:14px;">🟢 CLINIC OPEN</div>
+            <div style="background:rgba(255,255,255,0.1);border:2px dashed rgba(255,255,255,0.4);border-radius:10px;padding:8px 16px;font-weight:800;font-size:14px;opacity:0.5;">🔴 CLINIC CLOSED</div>
+          </div>
+          <div style="font-size:11px;margin-top:8px;opacity:0.75;">Circle which one applies — put on your badge to start!</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:20px;font-size:11px;font-weight:800;color:var(--soft);letter-spacing:1px;text-transform:uppercase;">
+      Pet Rescue HQ™ · Homework Hero System · <span style="color:var(--rescue-green);">🐾 Every task helps your patient recover!</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- ID BADGE                 -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-badge">
+<div class="sheet">
+  <div class="sheet-header" style="background:var(--green-light);border-bottom:3px solid var(--green-mid);">
+    <div class="header-tag" style="color:var(--rescue-green);">✂️ Print & Cut</div>
+    <div class="header-title" style="color:var(--dark);">Field Medic ID Badge</div>
+    <div class="header-sub" style="color:var(--mid);">Laminate and wear during every homework rescue mission!</div>
+    <div class="header-icon">🏅</div>
+  </div>
+  <div class="sheet-body">
+    <div class="cut-hint"><div class="cut-line"></div>✂️ Cut out your badge<div class="cut-line"></div></div>
+    <div style="display:flex;gap:28px;flex-wrap:wrap;justify-content:center;align-items:flex-start;">
+
+      <div class="id-badge">
+        <div class="badge-paw">🐾</div>
+        <div class="badge-top">
+          <div class="badge-logo">🐾</div>
+          <div class="badge-org">PET RESCUE HQ™<br>Homework Hero System</div>
+        </div>
+        <div class="badge-photo">📸<br>Photo</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="badge-field">
+            <div class="badge-field-label">Medic Name</div>
+            <div class="badge-field-line"></div>
+          </div>
+          <div class="badge-field">
+            <div class="badge-field-label">Animal Specialist</div>
+            <div class="badge-field-line"></div>
+          </div>
+          <div class="badge-field">
+            <div class="badge-field-label">Clinic Name</div>
+            <div class="badge-field-line"></div>
+          </div>
+          <div class="badge-field">
+            <div class="badge-field-label">Medic ID</div>
+            <div class="badge-field-line"></div>
+          </div>
+        </div>
+        <div class="badge-rank">
+          <div class="badge-rank-label">Current Rank</div>
+          <div class="badge-rank-value">🌱 Junior Rescue Medic</div>
+        </div>
+      </div>
+
+      <!-- Clinic Open/Closed signs -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;color:var(--dark);margin-bottom:4px;">🏥 Clinic Signs — Cut Out & Display</div>
+
+        <div style="background:var(--rescue-green);border-radius:16px;padding:22px 28px;text-align:center;border:4px solid #1A5C35;width:200px;">
+          <div style="font-size:36px;margin-bottom:6px;">🟢</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:22px;color:white;">CLINIC</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:28px;color:var(--rescue-amber);">OPEN</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8);margin-top:6px;font-weight:700;">Rescue Mission Active!</div>
+        </div>
+
+        <div style="background:#DC2626;border-radius:16px;padding:22px 28px;text-align:center;border:4px solid #991B1B;width:200px;">
+          <div style="font-size:36px;margin-bottom:6px;">🔴</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:22px;color:white;">CLINIC</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:28px;color:#FCA5A5;">CLOSED</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8);margin-top:6px;font-weight:700;">Mission Complete — Rest Time!</div>
+        </div>
+      </div>
+
+      <!-- Choose your animal -->
+      <div style="background:#F8FFF9;border:2.5px dashed var(--rescue-green);border-radius:18px;padding:20px;min-width:200px;">
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;color:var(--dark);margin-bottom:14px;">🐾 Choose Your Speciality</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:white;border:2px solid #C8E6D0;">
+            <span style="font-size:22px;">🐶</span><span style="font-weight:800;">Dog Specialist</span>
+            <div style="margin-left:auto;width:16px;height:16px;border:2.5px solid var(--rescue-green);border-radius:50%;"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:white;border:2px solid #C8E6D0;">
+            <span style="font-size:22px;">🐱</span><span style="font-weight:800;">Cat Specialist</span>
+            <div style="margin-left:auto;width:16px;height:16px;border:2.5px solid var(--rescue-green);border-radius:50%;"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:white;border:2px solid #C8E6D0;">
+            <span style="font-size:22px;">🐰</span><span style="font-weight:800;">Bunny Specialist</span>
+            <div style="margin-left:auto;width:16px;height:16px;border:2.5px solid var(--rescue-green);border-radius:50%;"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:white;border:2px solid #C8E6D0;">
+            <span style="font-size:22px;">🐦</span><span style="font-weight:800;">Bird Specialist</span>
+            <div style="margin-left:auto;width:16px;height:16px;border:2.5px solid var(--rescue-green);border-radius:50%;"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:white;border:2px solid #C8E6D0;">
+            <span style="font-size:22px;">🦔</span><span style="font-weight:800;">✏️ My own: ________</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- PATIENT CHART            -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-patient">
+<div class="sheet">
+  <div class="sheet-header" style="background:var(--teal-light);border-bottom:3px solid var(--rescue-teal);">
+    <div class="header-tag" style="color:var(--rescue-teal);">🏥 Medical Records</div>
+    <div class="header-title" style="color:var(--dark);">Animal Patient Chart</div>
+    <div class="header-sub" style="color:var(--mid);">Complete this for every rescue patient — keep it next to your homework!</div>
+    <div class="header-icon">📋</div>
+  </div>
+  <div class="sheet-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <!-- Patient chart -->
+      <div>
+        <div class="patient-chart">
+          <div class="chart-header">
+            <span style="font-size:28px;">🐾</span>
+            <div>
+              <div class="chart-title">Patient Admission Chart</div>
+              <div style="font-size:11px;opacity:0.8;">Pet Rescue HQ™ Medical Records</div>
+            </div>
+          </div>
+          <div class="chart-body">
+            <div class="chart-row">
+              <div>
+                <div class="chart-field-label">Patient Name</div>
+                <div class="chart-field-value"></div>
+              </div>
+              <div>
+                <div class="chart-field-label">Animal Type</div>
+                <div class="chart-field-value"></div>
+              </div>
+              <div>
+                <div class="chart-field-label">Rescue Date</div>
+                <div class="chart-field-value"></div>
+              </div>
+            </div>
+            <div class="chart-row">
+              <div>
+                <div class="chart-field-label">Why Rescued?</div>
+                <div class="chart-field-value"></div>
+              </div>
+              <div style="grid-column:span 2;">
+                <div class="chart-field-label">Medic in Charge</div>
+                <div class="chart-field-value"></div>
+              </div>
+            </div>
+            <div style="margin-top:4px;">
+              <div class="chart-field-label">Treatment Plan (homework subjects today)</div>
+              <div class="chart-field-value" style="margin-bottom:8px;"></div>
+              <div class="chart-field-value" style="margin-bottom:8px;"></div>
+              <div class="chart-field-value"></div>
+            </div>
+            <div class="chart-vitals">
+              <div class="vital-box">
+                <div class="vital-icon">💊</div>
+                <div class="vital-label">Tokens Needed</div>
+                <div class="vital-value"></div>
+              </div>
+              <div class="vital-box">
+                <div class="vital-icon">📅</div>
+                <div class="vital-label">Target Date</div>
+                <div class="vital-value"></div>
+              </div>
+              <div class="vital-box">
+                <div class="vital-icon">🌡️</div>
+                <div class="vital-label">Start Mood</div>
+                <div class="vital-value"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Mini animal draw box + notes -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="border:2.5px dashed var(--rescue-green);border-radius:18px;flex:1;min-height:200px;padding:16px;background:#F8FFF9;">
+          <div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--rescue-green);margin-bottom:8px;">🎨 Draw Your Patient Here!</div>
+          <div style="border:1.5px dashed #C8E6D0;border-radius:12px;height:160px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#C8E6D0;letter-spacing:1px;text-transform:uppercase;">
+            Draw your rescued pet!
+          </div>
+        </div>
+
+        <div style="background:var(--amber-light);border:2.5px solid var(--rescue-amber);border-radius:16px;padding:16px;">
+          <div style="font-family:'Fredoka One',cursive;font-size:15px;color:#78400A;margin-bottom:10px;">🌡️ How Does Your Patient Feel?</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:white;border:2px solid #FCD34D;">
+              <span style="font-size:20px;">😰</span>
+              <span style="font-weight:700;font-size:13px;">Very poorly — needs lots of help</span>
+              <div style="margin-left:auto;width:16px;height:16px;border:2.5px solid var(--rescue-amber);border-radius:50%;"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:white;border:2px solid #FCD34D;">
+              <span style="font-size:20px;">😟</span>
+              <span style="font-weight:700;font-size:13px;">Feeling wobbly but trying</span>
+              <div style="margin-left:auto;width:16px;height:16px;border:2.5px solid var(--rescue-amber);border-radius:50%;"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:white;border:2px solid #FCD34D;">
+              <span style="font-size:20px;">🙂</span>
+              <span style="font-weight:700;font-size:13px;">Getting better — making progress</span>
+              <div style="margin-left:auto;width:16px;height:16px;border:2.5px solid var(--rescue-amber);border-radius:50%;"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:white;border:2px solid #FCD34D;">
+              <span style="font-size:20px;">😁</span>
+              <span style="font-weight:700;font-size:13px;">Fully recovered — mission complete!</span>
+              <div style="margin-left:auto;width:16px;height:16px;border:2.5px solid var(--rescue-amber);border-radius:50%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- RECOVERY TRACKER         -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-recovery">
+<div class="sheet">
+  <div class="sheet-header" style="background:linear-gradient(135deg,#0E9B8A,#2D9B5A);">
+    <div class="header-tag" style="color:var(--teal-light);">🐾 Zeigarnik Visual Tool</div>
+    <div class="header-title" style="color:white;">Patient Recovery Tracker</div>
+    <div class="header-sub" style="color:rgba(255,255,255,0.7);">Every 3 Medicine Tokens = one recovery stage — colour in as your patient heals!</div>
+    <div class="header-icon">💚</div>
+  </div>
+  <div class="sheet-body">
+
+    <div style="background:var(--blue-light);border:2px solid #93C5FD;border-radius:14px;padding:14px 18px;margin-bottom:22px;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:24px;">🧠</span>
+      <div style="font-size:13px;font-weight:700;color:#1D4ED8;">The greyed-out stages show what your patient will look like when you complete all your homework. Can you see the finished picture? Your brain WANTS to fill it in — that's the superpower that keeps you going!</div>
+    </div>
+
+    <!-- Dog recovery -->
+    <div style="margin-bottom:28px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--rescue-green);margin-bottom:16px;">🐶 Dog Patient Recovery</div>
+      <div class="recovery-stages">
+        <div class="stage">
+          <div class="stage-animal unlocked" style="border-color:#EF4444;background:#FEF2F2;">😰</div>
+          <div class="stage-num" style="color:#EF4444;">Stage 1</div>
+          <div class="stage-label">Just Rescued</div>
+          <div style="font-size:9px;color:var(--rescue-amber);font-weight:800;margin-top:3px;">FREE — Start here!</div>
+        </div>
+        <div style="align-self:center;font-size:20px;color:#C8E6D0;">→</div>
+        <div class="stage">
+          <div class="stage-animal locked" style="border-color:#F59E0B;background:#FFF4E0;">😟</div>
+          <div class="stage-num" style="color:#F59E0B;">Stage 2</div>
+          <div class="stage-label">Resting</div>
+          <div style="font-size:9px;color:var(--soft);font-weight:800;margin-top:3px;">3 💊 tokens</div>
+        </div>
+        <div style="align-self:center;font-size:20px;color:#C8E6D0;">→</div>
+        <div class="stage">
+          <div class="stage-animal locked" style="border-color:#3B82F6;background:#EBF4FF;">🙂</div>
+          <div class="stage-num" style="color:#3B82F6;">Stage 3</div>
+          <div class="stage-label">Getting Better</div>
+          <div style="font-size:9px;color:var(--soft);font-weight:800;margin-top:3px;">6 💊 tokens</div>
+        </div>
+        <div style="align-self:center;font-size:20px;color:#C8E6D0;">→</div>
+        <div class="stage">
+          <div class="stage-animal locked" style="border-color:var(--rescue-green);background:var(--green-light);">😊</div>
+          <div class="stage-num" style="color:var(--rescue-green);">Stage 4</div>
+          <div class="stage-label">Nearly There</div>
+          <div style="font-size:9px;color:var(--soft);font-weight:800;margin-top:3px;">9 💊 tokens</div>
+        </div>
+        <div style="align-self:center;font-size:20px;color:#C8E6D0;">→</div>
+        <div class="stage">
+          <div class="stage-animal locked" style="border-color:var(--rescue-amber);background:var(--amber-light);">🎉</div>
+          <div class="stage-num" style="color:var(--rescue-amber);">Stage 5</div>
+          <div class="stage-label">RESCUED!</div>
+          <div style="font-size:9px;color:var(--rescue-amber);font-weight:800;margin-top:3px;">12 💊 tokens</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multi-animal rows -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <!-- Cat -->
+      <div style="border:2.5px solid var(--green-mid);border-radius:16px;padding:16px;">
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;color:var(--rescue-green);margin-bottom:12px;">🐱 Cat Recovery Track</div>
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-around;">
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">😿</div><div style="font-size:9px;font-weight:800;color:var(--soft);">Start</div></div>
+          <div style="font-size:14px;color:#C8E6D0;">→</div>
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">🙀</div><div style="font-size:9px;font-weight:800;color:var(--soft);">3💊</div></div>
+          <div style="font-size:14px;color:#C8E6D0;">→</div>
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">😺</div><div style="font-size:9px;font-weight:800;color:var(--soft);">6💊</div></div>
+          <div style="font-size:14px;color:#C8E6D0;">→</div>
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">😸</div><div style="font-size:9px;font-weight:800;color:var(--soft);">9💊</div></div>
+          <div style="font-size:14px;color:#C8E6D0;">→</div>
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">🎉</div><div style="font-size:9px;font-weight:800;color:var(--rescue-amber);">12💊</div></div>
+        </div>
+        <div style="margin-top:12px;height:16px;background:#F0FAF4;border-radius:8px;border:2px solid #C8E6D0;overflow:hidden;position:relative;">
+          <div style="position:absolute;left:0;top:0;height:100%;width:20%;background:var(--rescue-green);border-radius:6px;"></div>
+        </div>
+        <div style="text-align:center;font-size:10px;font-weight:700;color:var(--soft);margin-top:6px;">Colour in the bar as you earn tokens!</div>
+      </div>
+
+      <!-- Bunny -->
+      <div style="border:2.5px solid var(--green-mid);border-radius:16px;padding:16px;">
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;color:var(--rescue-green);margin-bottom:12px;">🐰 Bunny Recovery Track</div>
+        <div style="display:flex;gap:8px;align-items:center;justify-content:space-around;">
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">😰</div><div style="font-size:9px;font-weight:800;color:var(--soft);">Start</div></div>
+          <div style="font-size:14px;color:#C8E6D0;">→</div>
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">🐰</div><div style="font-size:9px;font-weight:800;color:var(--soft);">3💊</div></div>
+          <div style="font-size:14px;color:#C8E6D0;">→</div>
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">🐰</div><div style="font-size:9px;font-weight:800;color:var(--soft);">6💊</div></div>
+          <div style="font-size:14px;color:#C8E6D0;">→</div>
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">🐰</div><div style="font-size:9px;font-weight:800;color:var(--soft);">9💊</div></div>
+          <div style="font-size:14px;color:#C8E6D0;">→</div>
+          <div style="text-align:center;"><div style="font-size:28px;filter:grayscale(1);opacity:0.25;">🎉</div><div style="font-size:9px;font-weight:800;color:var(--rescue-amber);">12💊</div></div>
+        </div>
+        <div style="margin-top:12px;height:16px;background:#F0FAF4;border-radius:8px;border:2px solid #C8E6D0;overflow:hidden;position:relative;">
+          <div style="position:absolute;left:0;top:0;height:100%;width:20%;background:var(--rescue-green);border-radius:6px;"></div>
+        </div>
+        <div style="text-align:center;font-size:10px;font-weight:700;color:var(--soft);margin-top:6px;">Colour in the bar as you earn tokens!</div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;background:var(--rescue-green);border-radius:14px;padding:16px 22px;color:white;text-align:center;">
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:4px;">🏆 Rescue Complete When...</div>
+      <div style="font-size:13px;font-weight:700;opacity:0.85;">All 12 Medicine Tokens are earned · Patient reaches Stage 5 · Certificate awarded by Chief Vet!</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- MEDICINE TOKENS          -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-tokens">
+<div class="sheet">
+  <div class="sheet-header" style="background:var(--amber-light);border-bottom:3px solid var(--rescue-amber);">
+    <div class="header-tag" style="color:#78400A;">💊 Micro-Reward System</div>
+    <div class="header-title" style="color:var(--dark);">Medicine Token Collection</div>
+    <div class="header-sub" style="color:#A0550E;">Earn a token for every 3 homework tasks completed — click or colour each one!</div>
+    <div class="header-icon">🏥</div>
+  </div>
+  <div class="sheet-body">
+    <div style="background:var(--green-light);border:2px solid var(--green-mid);border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:24px;">🧠</span>
+      <div style="font-size:13px;font-weight:700;color:var(--mid);">Instead of looking at a big pile of homework, earn one token at a time. Every 3 tokens unlocks the next recovery stage for your patient. Your brain loves small wins — this is the dopamine ramp!</div>
+    </div>
+
+    <div class="token-grid" id="tokenGrid"></div>
+
+    <div style="margin-top:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <div style="background:var(--green-light);border:2px solid var(--green-mid);border-radius:12px;padding:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">💊💊💊</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:14px;color:var(--rescue-green);">3 Tokens</div>
+        <div style="font-size:11px;font-weight:700;color:var(--soft);margin-top:3px;">= Stage 2 unlocked</div>
+      </div>
+      <div style="background:#EBF4FF;border:2px solid #93C5FD;border-radius:12px;padding:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">💊×6</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:14px;color:var(--rescue-blue);">6 Tokens</div>
+        <div style="font-size:11px;font-weight:700;color:var(--soft);margin-top:3px;">= Stage 3 unlocked</div>
+      </div>
+      <div style="background:var(--purple-light);border:2px solid #C4B5FD;border-radius:12px;padding:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">💊×9</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:14px;color:var(--rescue-purple);">9 Tokens</div>
+        <div style="font-size:11px;font-weight:700;color:var(--soft);margin-top:3px;">= Stage 4 unlocked</div>
+      </div>
+      <div style="background:var(--amber-light);border:2px solid var(--rescue-amber);border-radius:12px;padding:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">💊×12</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:14px;color:#78400A;">12 Tokens</div>
+        <div style="font-size:11px;font-weight:700;color:var(--soft);margin-top:3px;">= FULLY RESCUED! 🎉</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- SUBJECT RESCUE CARDS     -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-subjects">
+<div class="sheet">
+  <div class="sheet-header" style="background:var(--purple-light);border-bottom:3px solid #C4B5FD;">
+    <div class="header-tag" style="color:var(--rescue-purple);">📚 Subject Missions</div>
+    <div class="header-title" style="color:var(--dark);">Subject Rescue Cards</div>
+    <div class="header-sub" style="color:#5B21B6;">One card per subject — break big homework into bite-size rescue tasks!</div>
+    <div class="header-icon">🗂️</div>
+  </div>
+  <div class="sheet-body">
+    <div style="background:#EBF4FF;border:2px solid #93C5FD;border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:24px;">💡</span>
+      <div style="font-size:13px;font-weight:700;color:#1D4ED8;">Parent tip: Use action words when writing tasks. Instead of "do maths" write "solve the first 5 addition problems". Specific tasks are easier for ADHD brains to start!</div>
+    </div>
+    <div class="subject-grid">
+
+      <div class="subject-card" style="background:#EBF4FF;border-color:#93C5FD;">
+        <div class="subject-header">
+          <div class="subject-icon">📖</div>
+          <div style="flex:1;">
+            <div class="subject-title" style="color:#1D4ED8;">Reading Rescue</div>
+            <div style="font-size:10px;font-weight:700;color:#3B82F6;">Earn 1 💊 per 5 mins read</div>
+          </div>
+        </div>
+        <div class="subject-task-rows">
+          <div class="subject-task-row" style="border-color:#BFDBFE;">
+            <div class="subject-check" style="border-color:#3B82F6;"></div>
+            <div style="font-size:11px;font-weight:700;color:#1D4ED8;flex:1;">Read pages ___ to ___</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:#BFDBFE;">
+            <div class="subject-check" style="border-color:#3B82F6;"></div>
+            <div style="font-size:11px;font-weight:700;color:#1D4ED8;flex:1;">Find 3 new words</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:#BFDBFE;">
+            <div class="subject-check" style="border-color:#3B82F6;"></div>
+            <div style="font-size:11px;font-weight:700;color:#1D4ED8;flex:1;">Tell someone what happened</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:transparent;background:transparent;">
+            <div class="subject-check" style="border-color:#BFDBFE;border-style:dashed;"></div>
+            <div style="flex:1;border-bottom:1px dashed #BFDBFE;height:16px;"></div>
+            <div class="subject-token" style="opacity:0.2;">💊</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subject-card" style="background:#FFF4E0;border-color:#FCD34D;">
+        <div class="subject-header">
+          <div class="subject-icon">🔢</div>
+          <div style="flex:1;">
+            <div class="subject-title" style="color:#92400E;">Maths Mission</div>
+            <div style="font-size:10px;font-weight:700;color:#F59E0B;">Earn 1 💊 per 3 problems</div>
+          </div>
+        </div>
+        <div class="subject-task-rows">
+          <div class="subject-task-row" style="border-color:#FDE68A;">
+            <div class="subject-check" style="border-color:#F59E0B;"></div>
+            <div style="font-size:11px;font-weight:700;color:#92400E;flex:1;">Solve problems 1 to ___</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:#FDE68A;">
+            <div class="subject-check" style="border-color:#F59E0B;"></div>
+            <div style="font-size:11px;font-weight:700;color:#92400E;flex:1;">Check your answers</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:#FDE68A;">
+            <div class="subject-check" style="border-color:#F59E0B;"></div>
+            <div style="font-size:11px;font-weight:700;color:#92400E;flex:1;">Write the hardest one again</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:transparent;background:transparent;">
+            <div class="subject-check" style="border-color:#FDE68A;border-style:dashed;"></div>
+            <div style="flex:1;border-bottom:1px dashed #FDE68A;height:16px;"></div>
+            <div class="subject-token" style="opacity:0.2;">💊</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subject-card" style="background:var(--purple-light);border-color:#C4B5FD;">
+        <div class="subject-header">
+          <div class="subject-icon">✏️</div>
+          <div style="flex:1;">
+            <div class="subject-title" style="color:#5B21B6;">Writing Ward</div>
+            <div style="font-size:10px;font-weight:700;color:#7C3AED;">Earn 1 💊 per sentence</div>
+          </div>
+        </div>
+        <div class="subject-task-rows">
+          <div class="subject-task-row" style="border-color:#DDD6FE;">
+            <div class="subject-check" style="border-color:#7C3AED;"></div>
+            <div style="font-size:11px;font-weight:700;color:#5B21B6;flex:1;">Write sentence 1</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:#DDD6FE;">
+            <div class="subject-check" style="border-color:#7C3AED;"></div>
+            <div style="font-size:11px;font-weight:700;color:#5B21B6;flex:1;">Write sentence 2</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:#DDD6FE;">
+            <div class="subject-check" style="border-color:#7C3AED;"></div>
+            <div style="font-size:11px;font-weight:700;color:#5B21B6;flex:1;">Read it back out loud</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:transparent;background:transparent;">
+            <div class="subject-check" style="border-color:#DDD6FE;border-style:dashed;"></div>
+            <div style="flex:1;border-bottom:1px dashed #DDD6FE;height:16px;"></div>
+            <div class="subject-token" style="opacity:0.2;">💊</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subject-card" style="background:var(--pink-light);border-color:#F9A8D4;">
+        <div class="subject-header">
+          <div class="subject-icon">🌍</div>
+          <div style="flex:1;">
+            <div class="subject-title" style="color:#9D174D;">Topic Rescue</div>
+            <div style="font-size:10px;font-weight:700;color:#EC4899;">Earn 1 💊 per fact learned</div>
+          </div>
+        </div>
+        <div class="subject-task-rows">
+          <div class="subject-task-row" style="border-color:#FBCFE8;">
+            <div class="subject-check" style="border-color:#EC4899;"></div>
+            <div style="font-size:11px;font-weight:700;color:#9D174D;flex:1;">Read about the topic</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:#FBCFE8;">
+            <div class="subject-check" style="border-color:#EC4899;"></div>
+            <div style="font-size:11px;font-weight:700;color:#9D174D;flex:1;">Write 2 facts I learned</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:#FBCFE8;">
+            <div class="subject-check" style="border-color:#EC4899;"></div>
+            <div style="font-size:11px;font-weight:700;color:#9D174D;flex:1;">Draw something from it</div>
+            <div class="subject-token">💊</div>
+          </div>
+          <div class="subject-task-row" style="border-color:transparent;background:transparent;">
+            <div class="subject-check" style="border-color:#FBCFE8;border-style:dashed;"></div>
+            <div style="flex:1;border-bottom:1px dashed #FBCFE8;height:16px;"></div>
+            <div class="subject-token" style="opacity:0.2;">💊</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Blank card -->
+    <div style="margin-top:16px;border:3px dashed #C8E6D0;border-radius:18px;padding:18px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:16px;color:var(--soft);margin-bottom:12px;">✏️ Custom Rescue Card</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:1px;color:var(--soft);text-transform:uppercase;margin-bottom:4px;">Subject</div>
+          <div style="border-bottom:2px dashed #C8E6D0;height:28px;"></div>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:1px;color:var(--soft);text-transform:uppercase;margin-bottom:4px;">Token rule</div>
+          <div style="border-bottom:2px dashed #C8E6D0;height:28px;"></div>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;align-items:center;"><div style="width:20px;height:20px;border:2px dashed #C8E6D0;border-radius:5px;flex-shrink:0;"></div><div style="flex:1;border-bottom:1px dashed #C8E6D0;height:18px;"></div><span style="font-size:14px;opacity:0.3;">💊</span></div>
+        <div style="display:flex;gap:10px;align-items:center;"><div style="width:20px;height:20px;border:2px dashed #C8E6D0;border-radius:5px;flex-shrink:0;"></div><div style="flex:1;border-bottom:1px dashed #C8E6D0;height:18px;"></div><span style="font-size:14px;opacity:0.3;">💊</span></div>
+        <div style="display:flex;gap:10px;align-items:center;"><div style="width:20px;height:20px;border:2px dashed #C8E6D0;border-radius:5px;flex-shrink:0;"></div><div style="flex:1;border-bottom:1px dashed #C8E6D0;height:18px;"></div><span style="font-size:14px;opacity:0.3;">💊</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- BRAIN BREAKS             -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-breaks">
+<div class="sheet">
+  <div class="sheet-header" style="background:linear-gradient(135deg,#7C3AED,#EC4899);">
+    <div class="header-tag" style="color:#F3EEFF;">🧠 Cognitive Reset Tool</div>
+    <div class="header-title" style="color:white;">Animal Playpen Brain Breaks</div>
+    <div class="header-sub" style="color:rgba(255,255,255,0.75);">Spin the wheel or pick a card — 3 minutes to reset and refuel!</div>
+    <div class="header-icon">🎡</div>
+  </div>
+  <div class="sheet-body">
+    <div style="background:var(--purple-light);border:2px solid #C4B5FD;border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:24px;">🧠</span>
+      <div style="font-size:13px;font-weight:700;color:#5B21B6;">Brain breaks are NOT giving up — they're part of the rescue plan! A 3-minute break helps the brain reset so your patient gets better care when you return.</div>
+    </div>
+
+    <div class="spinner-container">
+      <!-- Spinner wheel -->
+      <div style="text-align:center;">
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;color:var(--dark);margin-bottom:10px;">🎡 Spin the Break Wheel!</div>
+        <div class="spinner-wheel" id="spinnerWheel">
+          <div class="spinner-segment" style="background:#FEF3C7;transform:rotate(0deg);color:#92400E;">🐱<br>Stretch like<br>a cat!</div>
+          <div class="spinner-segment" style="background:#D1FAE5;transform:rotate(90deg);color:#065F46;">🐆<br>Run on<br>the spot!</div>
+          <div class="spinner-segment" style="background:#EDE9FE;transform:rotate(180deg);color:#5B21B6;">🐘<br>Stomp like<br>an elephant!</div>
+          <div class="spinner-segment" style="background:#FCE7F3;transform:rotate(270deg);color:#9D174D;">🦋<br>Flap your<br>wings!</div>
+          <div class="spinner-center" onclick="spinWheel()" title="Spin!">🐾</div>
+          <div class="spinner-arrow">▼</div>
+        </div>
+        <button onclick="spinWheel()" style="margin-top:12px;background:var(--rescue-green);color:white;border:none;font-family:'Fredoka One',cursive;font-size:16px;padding:10px 24px;border-radius:20px;cursor:pointer;">🌀 Spin!</button>
+        <div id="spinResult" style="margin-top:10px;font-family:'Fredoka One',cursive;font-size:14px;color:var(--rescue-green);min-height:24px;"></div>
+      </div>
+
+      <!-- Break cards -->
+      <div class="break-cards">
+        <div class="break-card" style="background:#FFF4E0;border-color:#FCD34D;color:#92400E;">
+          <div class="break-card-icon">🐱</div>
+          <div class="break-card-title">Cat Stretch</div>
+          <div class="break-card-desc">Stretch arms up high, arch your back like a cat waking up! 3 times.</div>
+        </div>
+        <div class="break-card" style="background:#D1FAE5;border-color:#6EE7B7;color:#065F46;">
+          <div class="break-card-icon">🐆</div>
+          <div class="break-card-title">Cheetah Run</div>
+          <div class="break-card-desc">Run on the spot as fast as you can for 20 seconds — GO!</div>
+        </div>
+        <div class="break-card" style="background:#EDE9FE;border-color:#C4B5FD;color:#5B21B6;">
+          <div class="break-card-icon">🐘</div>
+          <div class="break-card-title">Elephant Stomp</div>
+          <div class="break-card-desc">March around the room with heavy stompy elephant steps! 1 minute.</div>
+        </div>
+        <div class="break-card" style="background:#FCE7F3;border-color:#F9A8D4;color:#9D174D;">
+          <div class="break-card-icon">🦋</div>
+          <div class="break-card-title">Butterfly Wings</div>
+          <div class="break-card-desc">Flap your arms slowly and take 5 big deep breaths. Float gently!</div>
+        </div>
+        <div class="break-card" style="background:#EBF4FF;border-color:#93C5FD;color:#1D4ED8;">
+          <div class="break-card-icon">🐸</div>
+          <div class="break-card-title">Frog Jumps</div>
+          <div class="break-card-desc">Squat down and jump up 10 times like a jumping frog — ribbit!</div>
+        </div>
+        <div class="break-card" style="background:#F0FDF4;border-color:#6EE7B7;color:#065F46;">
+          <div class="break-card-icon">🐢</div>
+          <div class="break-card-title">Turtle Time</div>
+          <div class="break-card-desc">Move in super slow motion for 2 minutes. Everything is slooow.</div>
+        </div>
+        <div class="break-card" style="background:#FEF2F2;border-color:#FCA5A5;color:#991B1B;">
+          <div class="break-card-icon">🦁</div>
+          <div class="break-card-title">Lion Roar</div>
+          <div class="break-card-desc">Take a big breath in then roar it out as loud as you can! 3 roars.</div>
+        </div>
+        <div class="break-card" style="background:#FEFCE8;border-color:#FDE047;color:#78350F;">
+          <div class="break-card-icon">🐍</div>
+          <div class="break-card-title">Snake Wiggle</div>
+          <div class="break-card-desc">Wiggle your whole body from head to toe like a wiggly snake!</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;background:var(--rescue-green);border-radius:14px;padding:14px 20px;color:white;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:28px;">⏱️</span>
+      <div style="font-size:13px;font-weight:700;">Set a 3-minute timer for your brain break. When it beeps — back to the rescue! Your patient is counting on you. 🐾</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- RANKS                    -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-ranks">
+<div class="sheet">
+  <div class="sheet-header" style="background:linear-gradient(135deg,#0E9B8A,#2D9B5A);">
+    <div class="header-tag" style="color:var(--teal-light);">🏆 Medic Progression</div>
+    <div class="header-title" style="color:white;">Rescue Medic Rank System</div>
+    <div class="header-sub" style="color:rgba(255,255,255,0.75);">Earn ranks through effort, recovery, and showing up — not perfection!</div>
+    <div class="header-icon">🎖️</div>
+  </div>
+  <div class="sheet-body">
+    <div class="rank-list">
+      <div class="rank-item" style="background:#EBF4FF;border-color:#93C5FD;">
+        <div class="rank-icon">🌱</div>
+        <div>
+          <div class="rank-level">Rank 1</div>
+          <div class="rank-name" style="color:#1D4ED8;">Junior Rescue Medic</div>
+          <div class="rank-desc">Opening the rescue kit and starting the mission</div>
+        </div>
+        <div class="rank-tokens-needed" style="color:#3B82F6;">Start here!<br>Free rank 🎁</div>
+      </div>
+      <div class="rank-connector"></div>
+      <div class="rank-item" style="background:var(--green-light);border-color:var(--green-mid);">
+        <div class="rank-icon">🩺</div>
+        <div>
+          <div class="rank-level">Rank 2</div>
+          <div class="rank-name" style="color:var(--rescue-green);">Field Medic</div>
+          <div class="rank-desc">Completing homework with some help from the Chief Vet</div>
+        </div>
+        <div class="rank-tokens-needed" style="color:var(--rescue-green);">5 rescues<br>completed</div>
+      </div>
+      <div class="rank-connector"></div>
+      <div class="rank-item" style="background:#FFF4E0;border-color:#FCD34D;">
+        <div class="rank-icon">⭐</div>
+        <div>
+          <div class="rank-level">Rank 3</div>
+          <div class="rank-name" style="color:#92400E;">Senior Medic</div>
+          <div class="rank-desc">Using brain breaks and token system independently</div>
+        </div>
+        <div class="rank-tokens-needed" style="color:#F59E0B;">10 rescues<br>+ 2 full weeks</div>
+      </div>
+      <div class="rank-connector"></div>
+      <div class="rank-item" style="background:var(--purple-light);border-color:#C4B5FD;">
+        <div class="rank-icon">🏆</div>
+        <div>
+          <div class="rank-level">Rank 4</div>
+          <div class="rank-name" style="color:#5B21B6;">Lead Rescue Specialist</div>
+          <div class="rank-desc">Helping to plan the homework rescue missions themselves</div>
+        </div>
+        <div class="rank-tokens-needed" style="color:#7C3AED;">20 rescues<br>+ consistent effort</div>
+      </div>
+      <div class="rank-connector"></div>
+      <div class="rank-item" style="background:linear-gradient(135deg,#1A5C35,#2D9B5A);border-color:var(--rescue-amber);">
+        <div class="rank-icon">🐾</div>
+        <div>
+          <div class="rank-level" style="color:rgba(255,255,255,0.6);">Rank 5 — Elite</div>
+          <div class="rank-name" style="color:var(--rescue-amber);">Chief Rescue Veterinarian</div>
+          <div class="rank-desc" style="color:rgba(255,255,255,0.7);">The highest honour — teaching others the rescue methods</div>
+        </div>
+        <div class="rank-tokens-needed" style="color:var(--rescue-amber);">30 rescues<br>+ recovery mastery</div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;background:var(--amber-light);border:2px solid var(--rescue-amber);border-radius:14px;padding:14px 18px;font-size:12px;font-weight:700;color:#78400A;text-align:center;">
+      🌟 You earn ranks for: showing up · asking for help · taking a brain break · trying again · finishing even one subject · NOT perfection
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- PARENT SCRIPTS           -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-scripts">
+<div class="sheet">
+  <div class="sheet-header" style="background:var(--paw-light);border-bottom:3px solid #D4A88A;">
+    <div class="header-tag" style="color:var(--paw-brown);">💬 Chief Vet Scripts</div>
+    <div class="header-title" style="color:var(--dark);">Parent Script Swaps</div>
+    <div class="header-sub" style="color:var(--paw-brown);">Small word changes reduce resistance — try these this week!</div>
+    <div class="header-icon">📢</div>
+  </div>
+  <div class="sheet-body">
+    <div style="background:var(--green-light);border:2px solid var(--green-mid);border-radius:14px;padding:14px 18px;margin-bottom:20px;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:24px;">🧠</span>
+      <div style="font-size:13px;font-weight:700;color:var(--mid);">You are the Chief Veterinarian. Calm, structured language activates your child's mirror neurons — they start to mirror YOUR calm instead of escalating. These scripts help make that happen.</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="script-row">
+        <div class="script-box" style="background:#FEF2F2;border-color:#FECACA;">
+          <div class="script-tag" style="color:#EF4444;">❌ Instead of...</div>
+          <div class="script-text" style="color:#991B1B;">"Do your homework NOW. Stop wasting time!"</div>
+        </div>
+        <div class="script-arrow-box">→</div>
+        <div class="script-box" style="background:var(--green-light);border-color:var(--green-mid);">
+          <div class="script-tag" style="color:var(--rescue-green);">✅ Chief Vet says...</div>
+          <div class="script-text" style="color:var(--mid);">"The clinic is opening soon — time to put on your badge and check which patient needs you today."</div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-box" style="background:#FEF2F2;border-color:#FECACA;">
+          <div class="script-tag" style="color:#EF4444;">❌ Instead of...</div>
+          <div class="script-text" style="color:#991B1B;">"Why is it taking so long? It's only 5 questions!"</div>
+        </div>
+        <div class="script-arrow-box">→</div>
+        <div class="script-box" style="background:var(--green-light);border-color:var(--green-mid);">
+          <div class="script-tag" style="color:var(--rescue-green);">✅ Chief Vet says...</div>
+          <div class="script-text" style="color:var(--mid);">"Your patient needs just one more rescue step — which problem are we solving next?"</div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-box" style="background:#FEF2F2;border-color:#FECACA;">
+          <div class="script-tag" style="color:#EF4444;">❌ Instead of...</div>
+          <div class="script-text" style="color:#991B1B;">"Stop crying — it's just homework!"</div>
+        </div>
+        <div class="script-arrow-box">→</div>
+        <div class="script-box" style="background:var(--green-light);border-color:var(--green-mid);">
+          <div class="script-tag" style="color:var(--rescue-green);">✅ Chief Vet says...</div>
+          <div class="script-text" style="color:var(--mid);">"Looks like your medic brain needs a brain break. Spin the wheel — your patient will wait 3 minutes."</div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-box" style="background:#FEF2F2;border-color:#FECACA;">
+          <div class="script-tag" style="color:#EF4444;">❌ Instead of...</div>
+          <div class="script-text" style="color:#991B1B;">"You haven't even started. This is ridiculous."</div>
+        </div>
+        <div class="script-arrow-box">→</div>
+        <div class="script-box" style="background:var(--green-light);border-color:var(--green-mid);">
+          <div class="script-tag" style="color:var(--rescue-green);">✅ Chief Vet says...</div>
+          <div class="script-text" style="color:var(--mid);">"Let's do the very first step together. Just one. Your patient needs us."</div>
+        </div>
+      </div>
+
+      <div class="script-row">
+        <div class="script-box" style="background:#FEF2F2;border-color:#FECACA;">
+          <div class="script-tag" style="color:#EF4444;">❌ Instead of...</div>
+          <div class="script-text" style="color:#991B1B;">"If you don't finish, no screen time."</div>
+        </div>
+        <div class="script-arrow-box">→</div>
+        <div class="script-box" style="background:var(--green-light);border-color:var(--green-mid);">
+          <div class="script-tag" style="color:var(--rescue-green);">✅ Chief Vet says...</div>
+          <div class="script-text" style="color:var(--mid);">"Every token you earn today brings your patient one step closer to being rescued. You decide how many you earn."</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;background:var(--rescue-green);border-radius:14px;padding:14px 20px;color:white;text-align:center;">
+      <div style="font-family:'Fredoka One',cursive;font-size:16px;margin-bottom:4px;">🐾 Chief Vet Core Principle</div>
+      <div style="font-size:13px;font-weight:700;opacity:0.85;font-style:italic;">"Connection before correction — a calm vet creates a calm clinic."</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- WEEKLY LOG               -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-weekly">
+<div class="sheet">
+  <div class="sheet-header" style="background:var(--green-light);border-bottom:3px solid var(--green-mid);">
+    <div class="header-tag" style="color:var(--rescue-green);">📅 Weekly Progress</div>
+    <div class="header-title" style="color:var(--dark);">Weekly Rescue Log</div>
+    <div class="header-sub" style="color:var(--mid);">Track all 5 rescue days — celebrate every token earned!</div>
+    <div class="header-icon">📊</div>
+  </div>
+  <div class="sheet-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px;">
+      <div>
+        <div class="field-label" style="color:var(--soft);">Week of</div>
+        <div class="field-line" style="color:var(--rescue-green);border-color:var(--rescue-green);"></div>
+      </div>
+      <div>
+        <div class="field-label" style="color:var(--soft);">Medic Name</div>
+        <div class="field-line" style="color:var(--rescue-green);border-color:var(--rescue-green);"></div>
+      </div>
+      <div>
+        <div class="field-label" style="color:var(--soft);">Current Rank</div>
+        <div class="field-line" style="color:var(--rescue-green);border-color:var(--rescue-green);"></div>
+      </div>
+    </div>
+
+    <div class="week-grid">
+      <div class="day-col">
+        <div class="day-head">MON</div>
+        <div class="day-body">
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Reading</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Maths</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Writing</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Topic</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Other</div></div>
+        </div>
+        <div class="day-tokens">💊 ___</div>
+      </div>
+      <div class="day-col">
+        <div class="day-head">TUE</div>
+        <div class="day-body">
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Reading</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Maths</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Writing</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Topic</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Other</div></div>
+        </div>
+        <div class="day-tokens">💊 ___</div>
+      </div>
+      <div class="day-col">
+        <div class="day-head">WED</div>
+        <div class="day-body">
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Reading</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Maths</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Writing</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Topic</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Other</div></div>
+        </div>
+        <div class="day-tokens">💊 ___</div>
+      </div>
+      <div class="day-col">
+        <div class="day-head">THU</div>
+        <div class="day-body">
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Reading</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Maths</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Writing</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Topic</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Other</div></div>
+        </div>
+        <div class="day-tokens">💊 ___</div>
+      </div>
+      <div class="day-col">
+        <div class="day-head">FRI</div>
+        <div class="day-body">
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Reading</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Maths</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Writing</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Topic</div></div>
+          <div class="day-slot"><div class="day-check-sm"></div><div class="day-subject">Other</div></div>
+        </div>
+        <div class="day-tokens">💊 ___</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:16px;">
+      <div style="border:2px solid #C8E6D0;border-radius:12px;padding:14px;">
+        <div style="font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:var(--soft);margin-bottom:8px;">🌟 This Week's Wins</div>
+        <div style="border-bottom:1px dashed #C8E6D0;height:24px;margin-bottom:6px;"></div>
+        <div style="border-bottom:1px dashed #C8E6D0;height:24px;margin-bottom:6px;"></div>
+        <div style="border-bottom:1px dashed #C8E6D0;height:24px;"></div>
+      </div>
+      <div style="border:2px solid #C8E6D0;border-radius:12px;padding:14px;">
+        <div style="font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:var(--soft);margin-bottom:8px;">🐾 Patient Status</div>
+        <div style="border-bottom:1px dashed #C8E6D0;height:24px;margin-bottom:6px;"></div>
+        <div style="border-bottom:1px dashed #C8E6D0;height:24px;margin-bottom:6px;"></div>
+        <div style="border-bottom:1px dashed #C8E6D0;height:24px;"></div>
+      </div>
+      <div style="border:2px solid var(--rescue-amber);border-radius:12px;padding:14px;background:var(--amber-light);">
+        <div style="font-size:10px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#A0550E;margin-bottom:8px;">💊 Total Tokens</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:36px;color:var(--rescue-green);text-align:center;margin-top:8px;">___</div>
+        <div style="text-align:center;font-size:11px;font-weight:700;color:#A0550E;">this week</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- CERTIFICATES             -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-cert">
+<div class="sheet">
+  <div class="sheet-header" style="background:linear-gradient(135deg,#1A5C35,#2D9B5A);">
+    <div class="header-tag" style="color:var(--amber-mid);">🏆 Achievement Awards</div>
+    <div class="header-title" style="color:white;">Rescue Certificates</div>
+    <div class="header-sub" style="color:rgba(255,255,255,0.75);">Print, sign, and make it a BIG moment — they earned it!</div>
+    <div class="header-icon">🎖️</div>
+  </div>
+  <div class="sheet-body">
+    <div class="cert">
+      <div class="cert-corner" style="top:16px;left:20px;">🐾</div>
+      <div class="cert-corner" style="top:16px;right:20px;">🐾</div>
+      <div class="cert-corner" style="bottom:16px;left:20px;">⭐</div>
+      <div class="cert-corner" style="bottom:16px;right:20px;">⭐</div>
+      <div class="cert-badge">🏥</div>
+      <div class="cert-org">Pet Rescue HQ™ · Homework Hero System</div>
+      <div class="cert-title">Animal Rescue Certificate</div>
+      <div class="cert-awarded">This certificate is proudly awarded to</div>
+      <div class="cert-name-line"></div>
+      <div class="cert-name-label">Field Medic Name</div>
+      <div class="cert-reason">"For completing a full homework rescue mission with effort, bravery, and compassion for their patient"</div>
+      <div style="font-size:28px;margin-bottom:14px;">🐾 🏅 🐾</div>
+      <div class="cert-footer">
+        <div class="cert-sig">
+          <div class="cert-sig-line"></div>
+          <div class="cert-sig-label">Chief Vet (Parent)</div>
+        </div>
+        <div style="font-size:44px;align-self:center;">🐶</div>
+        <div class="cert-sig">
+          <div class="cert-sig-line"></div>
+          <div class="cert-sig-label">Date of Rescue</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini badges -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+      <div style="border:3px solid var(--rescue-green);border-radius:16px;padding:16px;text-align:center;background:var(--green-light);">
+        <div style="font-size:32px;margin-bottom:6px;">🔄</div>
+        <div style="font-family:'Fredoka One',cursive;font-weight:400;color:#1A5C35;font-size:15px;">Bounce Back Badge</div>
+        <div style="font-size:11px;color:var(--rescue-green);margin-top:4px;">Took a brain break and came back stronger</div>
+      </div>
+      <div style="border:3px solid var(--rescue-amber);border-radius:16px;padding:16px;text-align:center;background:var(--amber-light);">
+        <div style="font-size:32px;margin-bottom:6px;">📅</div>
+        <div style="font-family:'Fredoka One',cursive;font-weight:400;color:#78400A;font-size:15px;">5-Day Hero Badge</div>
+        <div style="font-size:11px;color:#A0550E;margin-top:4px;">Showed up for homework every day this week!</div>
+      </div>
+      <div style="border:3px solid var(--rescue-purple);border-radius:16px;padding:16px;text-align:center;background:var(--purple-light);">
+        <div style="font-size:32px;margin-bottom:6px;">💊</div>
+        <div style="font-family:'Fredoka One',cursive;font-weight:400;color:#4C1D95;font-size:15px;">Full Rescue Badge</div>
+        <div style="font-size:11px;color:#7C3AED;margin-top:4px;">Earned all 12 medicine tokens — patient saved!</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ======================== -->
+<!-- PARENT GUIDE             -->
+<!-- ======================== -->
+<div class="page-wrap" id="page-guide">
+<div class="sheet">
+  <div class="sheet-header" style="background:var(--paw-light);border-bottom:3px solid #D4A88A;">
+    <div class="header-tag" style="color:var(--paw-brown);">📖 Chief Vet Briefing</div>
+    <div class="header-title" style="color:var(--dark);">Parent Quick Start Guide</div>
+    <div class="header-sub" style="color:var(--paw-brown);">Everything you need to run Pet Rescue HQ in under 10 minutes</div>
+    <div class="header-icon">🩺</div>
+  </div>
+  <div class="sheet-body">
+    <div class="guide-section">
+      <div class="guide-title">🚨 The Mission</div>
+      <div class="guide-box">
+        <div class="guide-text">A rescue animal is in the clinic and only your child — the Lead Field Medic — can save it. Every homework task completed earns Medicine Tokens. Tokens unlock recovery stages. When the patient reaches Stage 5, they are fully rescued and a certificate is awarded.<br><br>You are the <strong>Chief Veterinarian</strong> — calm, structured, and in charge of the clinic.</div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-title">⚡ Quick Setup (5 minutes)</div>
+      <div class="guide-box">
+        <div class="guide-text">
+          <strong>Step 1:</strong> Print the ID Badge — let your child decorate and wear it during homework time.<br>
+          <strong>Step 2:</strong> Print the Patient Chart — fill in together before homework starts.<br>
+          <strong>Step 3:</strong> Set out the Medicine Token sheet — visible next to the homework.<br>
+          <strong>Step 4:</strong> Flip the Clinic sign to OPEN.<br>
+          <strong>Step 5:</strong> Start with ONE subject only — not all of them.
+        </div>
+      </div>
+      <div class="guide-highlight">
+        <div class="guide-highlight-text">💡 "Do not try to use all the printables on Day 1. Start with the Dashboard and Tokens only. Add tools as your child gets comfortable."</div>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-title">🧠 The Science (Quick Version)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="background:#EBF4FF;border:2px solid #93C5FD;border-radius:12px;padding:14px;">
+          <div style="font-family:'Fredoka One',cursive;font-size:14px;color:#1D4ED8;margin-bottom:6px;">💊 Dopamine Ramp</div>
+          <div style="font-size:12px;font-weight:600;color:#1D4ED8;opacity:0.8;">Small wins release dopamine. Tokens make each win visible. The brain chases the next token — keeping motivation going without nagging.</div>
+        </div>
+        <div style="background:var(--purple-light);border:2px solid #C4B5FD;border-radius:12px;padding:14px;">
+          <div style="font-family:'Fredoka One',cursive;font-size:14px;color:#5B21B6;margin-bottom:6px;">🧩 Zeigarnik Effect</div>
+          <div style="font-size:12px;font-weight:600;color:#5B21B6;opacity:0.8;">The greyed-out recovery stages create an "open loop" the brain wants to close. Seeing the unfinished picture drives completion.</div>
+        </div>
+        <div style="background:var(--green-light);border:2px solid var(--green-mid);border-radius:12px;padding:14px;">
+          <div style="font-family:'Fredoka One',cursive;font-size:14px;color:var(--rescue-green);margin-bottom:6px;">🎁 Initial Endowment</div>
+          <div style="font-size:12px;font-weight:600;color:var(--mid);">Giving 2 free tokens at the start tricks the brain into feeling already begun. Starting is the hardest part — this removes that barrier.</div>
+        </div>
+        <div style="background:var(--amber-light);border:2px solid var(--amber-mid);border-radius:12px;padding:14px;">
+          <div style="font-family:'Fredoka One',cursive;font-size:14px;color:#78400A;margin-bottom:6px;">🪞 Mirror Neurons</div>
+          <div style="font-size:12px;font-weight:600;color:#78400A;opacity:0.8;">When YOU stay calm as Chief Vet, your child's brain mirrors that calm. The role-play gives you both a character to hide behind — reducing conflict.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--rescue-green);border-radius:14px;padding:18px 22px;color:white;text-align:center;margin-top:4px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:20px;margin-bottom:6px;">🐾 Remember</div>
+      <div style="font-size:13px;font-weight:700;opacity:0.9;line-height:1.6;">"Stop the daily tears over homework. Pet Rescue HQ turns your child's biggest struggle into a rescue mission they actually want to finish."<br><br>Built by a neurodivergent founder — for families who live it every day.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page-wrap').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function toggleCheck(el) {
+    el.classList.toggle('done');
+    el.textContent = el.classList.contains('done') ? '✓' : '';
+  }
+
+  // Build token grid
+  const tokenGrid = document.getElementById('tokenGrid');
+  if (tokenGrid) {
+    const tokenTypes = ['💊','🩹','🌡️','💉','🏥','⭐','💊','🩹','🌡️','💉','🏥','⭐'];
+    const tokenLabels = ['Medicine','Bandage','Temp check','Treatment','Clinic visit','Hero star'];
+    for (let i = 0; i < 24; i++) {
+      const t = document.createElement('div');
+      t.className = 'token-card';
+      t.innerHTML = `<div class="t-icon">${tokenTypes[i % tokenTypes.length]}</div><div class="t-label">${tokenLabels[i % tokenLabels.length]}</div>`;
+      t.onclick = function() { this.classList.toggle('earned'); }
+      tokenGrid.appendChild(t);
+    }
+  }
+
+  // Spinner
+  const breaks = [
+    {emoji:'🐱',text:'Cat Stretch — arch your back 3 times!'},
+    {emoji:'🐆',text:'Cheetah Run — sprint on the spot for 20 seconds!'},
+    {emoji:'🐘',text:'Elephant Stomp — march around the room!'},
+    {emoji:'🦋',text:'Butterfly Wings — flap and take 5 deep breaths!'},
+    {emoji:'🐸',text:'Frog Jumps — jump 10 times!'},
+    {emoji:'🦁',text:'Lion Roar — take a big breath and ROAR!'},
+    {emoji:'🐍',text:'Snake Wiggle — wiggle from head to toe!'},
+    {emoji:'🐢',text:'Turtle Time — move in super slow motion!'}
+  ];
+  let spinning = false;
+  function spinWheel() {
+    if (spinning) return;
+    spinning = true;
+    const wheel = document.getElementById('spinnerWheel');
+    const result = document.getElementById('spinResult');
+    const pick = breaks[Math.floor(Math.random() * breaks.length)];
+    let deg = 360 * 5 + Math.floor(Math.random() * 360);
+    wheel.style.transition = 'transform 2s cubic-bezier(0.17,0.67,0.12,0.99)';
+    wheel.style.transform = `rotate(${deg}deg)`;
+    result.textContent = '';
+    setTimeout(() => {
+      spinning = false;
+      result.textContent = pick.emoji + ' ' + pick.text;
+    }, 2100);
+  }
+</script>
+</body>
+</html>
